@@ -2,22 +2,24 @@ import cv2 as cv
 import numpy as np
 
 def median_filter(image, kernel_size):
-    # Pad the image to handle borders
-    pad_size = kernel_size // 2
-    padded_image = cv.copyMakeBorder(image, pad_size, pad_size, pad_size, pad_size, cv.BORDER_REFLECT)
+    output = image.copy() # Create a copy of the image to store the output
+    half = kernel_size // 2
 
-    # Prepare an empty image for the output
-    output_image = np.zeros_like(image)
+    # Need to start at middle of kernel to avoid border issues
+    for i in range(kernel_size//2, image.shape[0] -kernel_size//2):
+        # Print progress every 50 rows
+        if (i - half) % 50 == 0:
+            print(f"Processing row {i}/{image.shape[0]}") 
+        for j in range(kernel_size//2, image.shape[1] -kernel_size//2):
+            for k in range(3): #for each color channel
+                # Extract the neighborhood
+                neighborhood = []
+                for di in range(-half, half + 1):      # -1, 0, 1 if 3x3 kernel
+                    for dj in range(-half, half + 1):  # -1, 0, 1 if 3x3 kernel
+                        neighborhood.append(image[i + di, j + dj, k]) #append the pixel value to the neighborhood list
 
-    # Apply median filter
-    for i in range(image.shape[0]):
-        for j in range(image.shape[1]):
-            # Extract the kernel region
-            kernel_region = padded_image[i:i+kernel_size, j:j+kernel_size]
-            # Compute the median value for each channel
-            output_image[i, j] = np.median(kernel_region.reshape(-1, 3), axis=0)
-
-    return output_image
+                output[i, j, k] = np.median(neighborhood) #flatten the neighborhood and compute the median
+    return output
 
 def main():
     # Load the image
@@ -27,8 +29,8 @@ def main():
     cv.putText(image, 'Hibbitts', (30, 90), cv.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 2)
 
     # Modify every 4th pixel
-    for i in range(0, image.shape[0], 4): #width of the image; step of 4
-        for j in range(0, image.shape[1], 4): #height of the image; step of 4
+    for i in range(0, image.shape[0], 4): #height of the image; step of 4
+        for j in range(0, image.shape[1], 4): #width of the image; step of 4
             image[i, j] = np.random.randint(0, 256, 3) #size 3 for RGB channels
 
     # Save the modified image
