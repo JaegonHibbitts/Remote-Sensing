@@ -1,6 +1,6 @@
 # ENME 489Y: Remote Sensing
 # Tracks green 'stoplight' and saves 45 seconds of tracking video
-# Optimized for higher FPS on Raspberry Pi / Picamera2 / OpenCV
+# Optimized for Raspberry Pi / Picamera2 / OpenCV
 
 from picamera2 import Picamera2
 import cv2
@@ -13,10 +13,10 @@ colorUpper = (75, 255, 255)
 # -----------------------------
 # Camera / video settings
 # -----------------------------
-frame_width = 320
-frame_height = 240
+frame_width = 480
+frame_height = 360
 fps_request = 40.0
-video_fps = 20
+video_fps = 30
 duration_seconds = 45
 
 # Initialize Pi camera with OpenCV-friendly BGR output
@@ -34,7 +34,7 @@ time.sleep(0.2)
 # Create video writer for processed/tracked output
 fourcc = cv2.VideoWriter_fourcc(*"mp4v")
 out = cv2.VideoWriter(
-    "stoplight_tracking.mp4",
+    "Jason's_stoplight_tracker.mp4",
     fourcc,
     video_fps,
     (frame_width, frame_height)
@@ -42,7 +42,6 @@ out = cv2.VideoWriter(
 
 # Timing
 start_time = time.time()
-prev_time = time.time()
 
 try:
     while True:
@@ -96,36 +95,6 @@ try:
                         -1
                     )
 
-        # Compute FPS
-        current_time = time.time()
-        fps = 1.0 / (current_time - prev_time)
-        prev_time = current_time
-
-        # Compute elapsed/remaining time
-        elapsed = current_time - start_time
-        remaining = max(0, duration_seconds - elapsed)
-
-        # Overlay FPS and timer
-        cv2.putText(
-            image,
-            f"FPS: {fps:.1f}",
-            (10, 20),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (255, 255, 255),
-            1
-        )
-
-        cv2.putText(
-            image,
-            f"Time Left: {remaining:.1f}s",
-            (10, 40),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
-            (255, 255, 255),
-            1
-        )
-
         # Show live frame
         cv2.imshow("Frame", image)
 
@@ -133,6 +102,7 @@ try:
         out.write(image)
 
         # Stop after set duration
+        elapsed = time.time() - start_time
         if elapsed >= duration_seconds:
             print("45 second video complete.")
             break
