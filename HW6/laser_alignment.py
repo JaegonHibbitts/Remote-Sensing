@@ -219,7 +219,7 @@ def choose_candidate(candidates, previous_raw_pixel):
 # Find and sort calibration images
 # --------------------------------------------------
 
-files = glob.glob("alignment_images/*.jpg")
+files = glob.glob("improved_alignment_images/*.jpg")
 
 file_distance_pairs = []
 
