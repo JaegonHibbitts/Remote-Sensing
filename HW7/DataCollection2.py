@@ -13,7 +13,7 @@ time.sleep(1)
 
 # Base directory = folder where this script is located
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-ALIGNMENT_DIR = os.path.join(BASE_DIR, "alignment_images")
+ALIGNMENT_DIR = os.path.join(BASE_DIR, "second_alignment_images")
 
 # Create alignment_images folder if it does not already exist
 os.makedirs(ALIGNMENT_DIR, exist_ok=True)
