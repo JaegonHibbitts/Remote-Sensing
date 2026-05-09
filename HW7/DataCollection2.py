@@ -55,9 +55,9 @@ cv2.line(image, (640, 0), (640, 720), (0, 150, 150), 1)
 cv2.line(image, (600, 360), (1280, 360), (0, 150, 150), 1)
 
 # display IMU angle, for reference
-font = cv2.FONT_HERSHEY_COMPLEX_SMALL
-red = (0, 0, 255)
-cv2.putText(image, d, (800, 200), font, 10, red, 10)
+#font = cv2.FONT_HERSHEY_COMPLEX_SMALL
+#red = (0, 0, 255)
+#cv2.putText(image, d, (800, 200), font, 10, red, 10)
 
 # write image to file
 d = int(d)
